@@ -2,12 +2,11 @@ const KEYS = {
   "[": 219,
   "]": 221,
   "m": 77,
-  
-
 };
 
 let last_reset = 0;
-const callbacks = () => {
+
+const globalCallback = () => {
   if (last_reset < 0) {
     if (keyIsDown(KEYS["["])) {
       ITEM_INDEX = Math.max(ITEM_INDEX - 1, 0);
@@ -22,6 +21,11 @@ const callbacks = () => {
     last_reset = 10;
   }
   last_reset--;
+};
+
+const callbacks = (objects, mode = "Eye", objectIndex = 0) => {
+  globalCallback();
+  objectCallbacks(objects, mode, objectIndex);
 };
 
 const objectCallbacks = (objects, mode = "Eye", objectIndex = 0) => {

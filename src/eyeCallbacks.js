@@ -38,15 +38,14 @@ const zoom = (cube, isEye = false) => {
 
   if (keyIsDown(189)) {
     cube.points.forEach((point) => point.z += delta);
-    cube.faces.forEach((face) => face.z += delta);
+
     cube.pos.z += delta;
   }
   if (keyIsDown(187)) {
     cube.points.forEach((point) => point.z -= delta);
-    cube.faces.forEach((face) => face.z -= delta);
+
     cube.pos.z -= delta;
   }
-  cube.updateShape();
 };
 
 const move = (cube, isEye = false) => {
@@ -54,32 +53,26 @@ const move = (cube, isEye = false) => {
 
   if (keyIsDown(87)) {
     cube.points.forEach((point) => point.y -= delta);
-    cube.faces.forEach((face) => face.y -= delta);
     cube.pos.y -= delta;
   }
   if (keyIsDown(83)) {
     cube.points.forEach((point) => point.y += delta);
-    cube.faces.forEach((face) => face.y += delta);
     cube.pos.y += delta;
   }
   if (keyIsDown(65)) {
     cube.points.forEach((point) => point.x -= delta);
-    cube.faces.forEach((face) => face.x -= delta);
     cube.pos.x -= delta;
   }
   if (keyIsDown(68)) {
     cube.points.forEach((point) => point.x += delta);
-    cube.faces.forEach((face) => face.x += delta);
     cube.pos.x += delta;
   }
   if (keyIsDown(81)) {
     cube.points.forEach((point) => point.z -= delta);
-    cube.faces.forEach((face) => face.z -= delta);
     cube.pos.z -= delta;
   }
   if (keyIsDown(69)) {
     cube.points.forEach((point) => point.z += delta);
-    cube.faces.forEach((face) => face.z += delta);
     cube.pos.z += delta;
   }
 };
