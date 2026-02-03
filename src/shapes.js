@@ -7,7 +7,7 @@ const WORLD_ITEMS = {
     "#00fff7",
     "#ff7300",
   ],
-}
+};
 // const WORLD_ITEMS.palettes =;
 
 class Cone {
@@ -233,7 +233,7 @@ class Star {
       const next = (i + 1) % this.sides;
       faces.push({
         points: [this.points[i], this.points[next], this.top],
-        color: WORLD_ITEMS.palettes[i % WORLD_ITEMS.palettes.length],
+        color: this.color[i % this.color.length],
         strokeColor: this.strokeColor,
       });
     }
@@ -242,7 +242,7 @@ class Star {
       const next = (i + 1) % this.sides;
       faces.push({
         points: [this.points[next], this.points[i], this.bottom],
-        color: WORLD_ITEMS.palettes[i % WORLD_ITEMS.palettes.length],
+        color: this.color[i % this.color.length],
         strokeColor: this.strokeColor,
       });
     }

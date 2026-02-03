@@ -25,6 +25,13 @@ const normalOfFace = (p1, p2, p3) => {
 };
 
 const getProspectivePoint = (point, screen) => {
+  // if (point.z < 0.1) {
+  //   return createVector(
+  //     screen.width * Math.sign(point.x),
+  //     screen.height * Math.sign(point.y),
+  //     0,
+  //   );
+  // }
   const zUnitVector = createVector(0, 0, 1);
 
   const zProjectionP1 = point.dot(zUnitVector);
@@ -73,6 +80,9 @@ const getNormalAndCenter = (face) => {
     strokeColor: face.strokeColor,
   };
 };
+const NEAR_Z = 0;
+
+const isInside = (p) => p.z > NEAR_Z;
 
 const getAllFacesWithDetail = (objects) => {
   const faces = objects.flatMap((each) => each.getFaces());
@@ -102,14 +112,52 @@ const getVisibleFaces = (faces) => {
 const dbg = (x) => console.log(x) || x;
 
 const drawFace = (face) => {
-  fill(face.color);
+  if (!face.points || face.points.length < 3) return;
 
+  fill(face.color);
   stroke(face.strokeColor || [0, 0, 0, 0]);
-  strokeWeight(2);
+  strokeWeight(1);
+
   beginShape();
   for (const point of face.points) {
+    // if (!point) continue;
     vertex(point.x, point.y);
   }
-  vertex(face.points[0].x, face.points[0].y);
-  endShape();
+  endShape(CLOSE);
 };
+
+// const getClippedPoint = (p1, p2) => {
+//   const t = (NEAR_Z - p1.z) / (p2.z - p1.z);
+//   return createVector(
+//     p1.x + (p2.x - p1.x) * t,
+//     p1.y + (p2.y - p1.y) * t,
+//     NEAR_Z,
+//   );
+// };
+// const clipFace = (face) => {
+//   const pts = face.points;
+//   if (!pts || pts.length < 2) return { ...face, points: [] };
+
+//   const clipped = [];
+
+//   for (let i = 0; i < pts.length; i++) {
+//     const curr = pts[i];
+//     const next = pts[(i + 1) % pts.length];
+
+//     if (!curr || !next) continue;
+
+//     const currInside = isInside(curr);
+//     const nextInside = isInside(next);
+
+//     if (currInside && nextInside) {
+//       clipped.push(next);
+//     } else if (currInside && !nextInside) {
+//       clipped.push(getClippedPoint(curr, next));
+//     } else if (!currInside && nextInside) {
+//       clipped.push(getClippedPoint(curr, next));
+//       clipped.push(next);
+//     }
+//   }
+
+//   return { ...face, points: clipped };
+// };
