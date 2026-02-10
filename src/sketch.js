@@ -7,6 +7,7 @@ const OBJECTS = [];
 let MODE = "Eye";
 let ITEM_INDEX = 0;
 
+let CAR;
 const tempWorld = (OBJECTS) => {
   //                  x y   z      h    w    d
   const r1 = new Cube(0, 50, 2000, 10, 400, 4000, ["black"], [0, 0, 0, 0]);
@@ -29,8 +30,8 @@ function setup() {
   // const cube = new Cube(0, 50, 0, 10, 400, 4000, ["black"], "white");
   // OBJECTS.push(cube);
   tempWorld(OBJECTS);
-  const cube2 = new Cube(0, 0, 100, 50, 50, 50, ["blue"], "red");
-  OBJECTS.push(cube2);
+  CAR = new Cube(0, 30, 50, 20, 20, 20, ["blue"], "red");
+  // OBJECTS.push(cube2);
 
   // const py = new Pyramid(100, -100, 1000, 200, 200, 200);
   // OBJECTS.push(py);
@@ -62,43 +63,6 @@ function setup() {
   // OBJECTS.push(cone);
 }
 
-const getClippedPoint = (p1, p2) => {
-  const targetZ = 0.1;
-
-  const diff = p2.z - p1.z;
-
-  const ratio = diff === 0 ? 0 : ((targetZ - p1.z) / diff);
-
-  const dx = p2.x - p1.x;
-  const dy = p2.y - p1.y;
-
-  const x = (dx * ratio) + p1.x;
-  const y = (dy * ratio) + p1.y;
-  return createVector(x, y, targetZ);
-};
-
-const clipFace = (face) => {
-  const points = [];
-  const facePoints = face.points;
-  for (let i = 0; i < facePoints.length; i++) {
-    const prev = facePoints.at(i - 1);
-    const current = facePoints[i];
-    const next = facePoints[(i + 1) % facePoints.length];
-    if (current.z >= 0.1) {
-      if (next.z >= 0.1) {
-        points.push(next);
-      } else {
-        points.push(getClippedPoint(current, next));
-      }
-    } else {
-      if (next.z >= 0.1) {
-        points.push(getClippedPoint(current, next));
-        points.push(next);
-      }
-    }
-  }
-  return { ...face, points };
-};
 
 function draw() {
   translate(width / 2, height / 2);
@@ -120,6 +84,14 @@ function draw() {
   toDraw.forEach((face) => {
     drawFace(face);
   });
+
+  // console.log(CAR);
+
+  const carFaces = getAllFacesWithDetail([CAR]);
+  const visible = getVisibleFaces(carFaces);
+  const toDrawCar = getPrintablePoint(visible);
+  toDrawCar.forEach((face) => drawFace(face));
+  // console.log(carFaces);
 
   metaData();
   stroke(0);

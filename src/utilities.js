@@ -111,6 +111,46 @@ const getVisibleFaces = (faces) => {
 
 const dbg = (x) => console.log(x) || x;
 
+const getClippedPoint = (p1, p2) => {
+  const targetZ = 0.1;
+
+  const diff = p2.z - p1.z;
+
+  const ratio = diff === 0 ? 0 : ((targetZ - p1.z) / diff);
+
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+
+  const x = (dx * ratio) + p1.x;
+  const y = (dy * ratio) + p1.y;
+  return createVector(x, y, targetZ);
+};
+
+const SCREEN_Z = 700;
+
+const clipFace = (face) => {
+  const points = [];
+  const facePoints = face.points;
+  for (let i = 0; i < facePoints.length; i++) {
+    const prev = facePoints.at(i - 1);
+    const current = facePoints[i];
+    const next = facePoints[(i + 1) % facePoints.length];
+    if (current.z >= 0.1) {
+      if (next.z >= 0.1) {
+        points.push(next);
+      } else {
+        points.push(getClippedPoint(current, next));
+      }
+    } else {
+      if (next.z >= 0.1) {
+        points.push(getClippedPoint(current, next));
+        points.push(next);
+      }
+    }
+  }
+  return { ...face, points };
+};
+
 const drawFace = (face) => {
   if (!face.points || face.points.length < 3) return;
 
